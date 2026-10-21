@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Forma">
+<title>Forma</title>
+<style>
+:root{
+  --bg:#0b0b0c; --bg2:#151518; --glass:rgba(255,255,255,.06); --glass-hi:rgba(255,255,255,.10);
+  --line:rgba(255,255,255,.10); --text:#ecebe8; --muted:#8b8b93; --accent:#ecebe8; --accent-ink:#111;
+  --danger:#c9777a; --blur:blur(10px); --r:22px;
+  --font:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg)}
+body{font-family:var(--font);color:var(--text);min-height:100vh;
+  background:radial-gradient(900px 500px at 85% -10%,#2a2a30 0%,transparent 60%),radial-gradient(700px 500px at -10% 40%,#1e1e22 0%,transparent 60%),var(--bg);
+  background-attachment:fixed;
+  padding:env(safe-area-inset-top,0) 0 calc(104px + env(safe-area-inset-bottom,0));-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:22px 16px}
+h1{font-size:30px;font-weight:650;letter-spacing:-.02em;margin:6px 4px 18px}
+h2{font-size:16px;font-weight:600;margin:0;letter-spacing:-.01em}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+label.f{display:block;font-size:13px;color:var(--muted);margin:0 0 8px 2px}
+input,select,textarea{font:inherit;color:var(--text);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;
+  padding:13px 14px;width:100%;outline:none;color-scheme:dark;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:rgba(236,235,232,.55)}
+input::placeholder,textarea::placeholder{color:#62626b}
+textarea{resize:vertical;min-height:54px}
+button{font:inherit;cursor:pointer;border:0;border-radius:16px;font-weight:600;color:var(--text);min-height:48px;padding:0 18px;background:var(--glass-hi);border:1px solid var(--line)}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{width:100%}
+.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.ghost{background:transparent;border-style:dashed;color:var(--muted);width:100%}
+.danger{color:var(--danger)}
+.row{display:flex;gap:10px;align-items:center}
+.x{background:transparent;border:0;color:var(--muted);width:40px;min-height:40px;padding:0;font-size:22px;flex:none}
+.ex-head{display:flex;gap:6px;align-items:center;margin-bottom:12px}
+.ex-head input{font-weight:600;font-size:16px;background:transparent;border-color:transparent;padding-left:2px}
+.ex-head input:focus{background:rgba(0,0,0,.35)}
+.cols,.set{display:grid;grid-template-columns:26px 1fr 1fr 40px;gap:8px;align-items:center}
+.cols{font-size:12px;color:var(--muted);text-align:center;margin-bottom:6px}
+.set{margin-bottom:8px}
+.set>span{color:var(--muted);text-align:center;font-size:14px}
+.set input{text-align:center;font-weight:600;font-size:17px;padding:12px 4px}
+.add{margin-top:4px;width:100%}
+.hint{color:var(--muted);text-align:center;padding:28px 10px;line-height:1.55;font-size:15px}
+.chip{display:inline-flex;align-items:center;gap:2px;background:var(--glass-hi);border:1px solid var(--line);border-radius:99px;padding:2px 2px 2px 14px;margin:0 6px 6px 0;font-size:14px}
+.chip .x{width:32px;min-height:32px;font-size:18px}
+/* habits */
+.ringwrap{display:flex;align-items:center;gap:22px}
+.ring{width:116px;height:116px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:26px;font-weight:650;letter-spacing:-.02em}
+.ringwrap p{margin:0;color:var(--muted);line-height:1.5}
+.ringwrap p strong{display:block;color:var(--text);font-size:19px;font-weight:600;margin-bottom:2px}
+.habit{display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--line)}
+.habit:last-child{border-bottom:0}
+.habit label{flex:1;display:flex;align-items:center;gap:14px;min-height:58px;cursor:pointer;font-size:16px;min-width:0}
+.habit .t{overflow:hidden;text-overflow:ellipsis}
+.habit input{position:absolute;opacity:0;width:1px;height:1px}
+.box{width:28px;height:28px;border-radius:50%;border:1.5px solid #55555d;flex:none;display:grid;place-items:center;color:transparent;font-size:15px;transition:.15s}
+.habit input:checked+.box{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.habit input:checked~.t{color:var(--muted);text-decoration:line-through}
+.habit input:focus-visible+.box{outline:2px solid var(--accent);outline-offset:2px}
+/* history */
+.h-item{padding:0;overflow:hidden}
+.h-top{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;background:transparent;border:0;border-radius:0;padding:16px;min-height:70px;gap:10px}
+.h-top small{display:block;color:var(--muted);font-weight:400;margin-top:3px;font-size:14px}
+.chev{color:var(--muted);transition:transform .2s;flex:none;font-size:12px}
+.open .chev{transform:rotate(180deg)}
+.h-body{display:none;padding:2px 16px 16px;border-top:1px solid var(--line)}
+.open .h-body{display:block}
+.h-body h3{font-size:15px;font-weight:600;margin:16px 0 6px}
+.h-body p{margin:3px 0;font-size:15px;color:#cfcfd4}
+.note{background:rgba(0,0,0,.3);border-radius:12px;padding:9px 12px;margin-top:8px;font-size:14px;color:var(--muted)}
+/* nav + toast */
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0));width:min(420px,calc(100% - 28px));
+  display:flex;gap:4px;padding:6px;background:rgba(30,30,34,.55);border:1px solid var(--line);border-radius:26px;z-index:5;
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;border-radius:20px;background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:500}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{background:var(--glass-hi);color:var(--text)}
+#toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0));transform:translate(-50%,-90px);background:var(--accent);color:var(--accent-ink);
+  padding:12px 20px;border-radius:99px;font-weight:600;font-size:14px;transition:transform .3s;z-index:9}
+#toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav>
+  <button class="tab" data-tab="workout"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>Workout</button>
+  <button class="tab" data-tab="habits"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg>Habits</button>
+  <button class="tab" data-tab="history"><svg viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5M3.5 4v4.5H8M12 7.5V12l3 2"/></svg>History</button>
+</nav>
+<div id="toast" role="status"></div>
+
+<script>
+/* ---------- PWA: manifest and icons generated in-page ---------- */
+(function(){
+  try{
+    const icon = s => { const c = document.createElement('canvas'); c.width = c.height = s; const x = c.getContext('2d');
+      x.fillStyle = '#0b0b0c'; x.fillRect(0,0,s,s); x.strokeStyle = '#ecebe8'; x.lineWidth = s*.07;
+      x.beginPath(); x.arc(s/2,s/2,s*.28,0,7); x.stroke(); x.fillStyle = '#ecebe8';
+      x.beginPath(); x.arc(s/2,s/2,s*.07,0,7); x.fill(); return c.toDataURL('image/png'); };
+    const i192 = icon(192), i512 = icon(512);
+    const m = {name:'Forma', short_name:'Forma', description:'Workout journal and habit tracker', start_url:location.href.split('#')[0],
+      display:'standalone', orientation:'portrait', background_color:'#0b0b0c', theme_color:'#0b0b0c',
+      icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+    const link = document.createElement('link'); link.rel = 'manifest';
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(m)], {type:'application/manifest+json'}));
+    document.head.appendChild(link);
+    const ai = document.createElement('link'); ai.rel = 'apple-touch-icon'; ai.href = i192; document.head.appendChild(ai);
+    // offline cache: works when the file is served over https or localhost together with sw.js
+    if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }catch(e){}
+})();
+
+/* ---------- State ---------- */
+const KEY = 'forma-v1';
+const pad = n => String(n).padStart(2,'0');
+const todayStr = () => { const d = new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate = s => { const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d).toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', year:'numeric'}); };
+const newDraft = () => ({id:null, date:todayStr(), type:'', exercises:[], note:''});
+
+function load(){
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) {}
+  return {workouts: s.workouts || [], habits: s.habits || [], log: s.log || {}, types: s.types || [], draft: s.draft || newDraft()};
+}
+let S = load(), tab = 'workout', openId = null, manage = false;
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
+const clone = o => JSON.parse(JSON.stringify(o));
+function toast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 1800); }
+
+/* ---------- Views ---------- */
+function render(){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  app.innerHTML = tab === 'workout' ? viewWorkout() : tab === 'habits' ? viewHabits() : viewHistory();
+}
+
+function viewWorkout(){
+  const d = S.draft;
+  let h = '<h1>' + (d.id ? 'Edit workout' : 'Workout') + '</h1>' +
+    '<div class="card"><label class="f" for="date">Date</label><input type="date" id="date" value="' + d.date + '"></div>' +
+    '<div class="card"><label class="f" for="type">Workout type</label><div class="row"><select id="type"><option value="">Select type</option>' +
+    S.types.map(t => '<option' + (t === d.type ? ' selected' : '') + ' value="' + esc(t) + '">' + esc(t) + '</option>').join('') +
+    '</select><button data-act="manage" style="flex:none">' + (manage ? 'Done' : 'Edit types') + '</button></div>';
+  if (manage || !S.types.length) {
+    h += '<div style="margin-top:14px">' + S.types.map((t, i) => '<span class="chip">' + esc(t) +
+      '<button class="x" data-act="deltype" data-i="' + i + '" aria-label="Delete type ' + esc(t) + '">×</button></span>').join('') +
+      '<div class="row" style="margin-top:6px"><input id="newType" placeholder="New type, e.g. Lower Body Heavy" maxlength="40">' +
+      '<button data-act="addtype" style="flex:none">Add</button></div></div>';
+  }
+  h += '</div>';
+  d.exercises.forEach((ex, i) => {
+    h += '<div class="card"><div class="ex-head"><input data-i="' + i + '" data-f="name" value="' + esc(ex.name) + '" placeholder="Exercise name, e.g. Hip Thrust" maxlength="60" aria-label="Exercise name">' +
+      '<button class="x" data-act="delex" data-i="' + i + '" aria-label="Remove exercise">×</button></div>';
+    if (ex.sets.length) h += '<div class="cols"><span></span><span>Weight (kg)</span><span>Reps</span><span></span></div>';
+    ex.sets.forEach((s, j) => {
+      h += '<div class="set"><span>' + (j+1) + '</span>' +
+        '<input inputmode="decimal" placeholder="0" value="' + esc(s.w) + '" data-i="' + i + '" data-j="' + j + '" data-f="w" aria-label="Weight in kg">' +
+        '<input inputmode="numeric" placeholder="0" value="' + esc(s.r) + '" data-i="' + i + '" data-j="' + j + '" data-f="r" aria-label="Reps">' +
+        '<button class="x" data-act="delset" data-i="' + i + '" data-j="' + j + '" aria-label="Delete set">×</button></div>';
+    });
+    h += '<button class="add" data-act="addset" data-i="' + i + '">+ Add Set</button></div>';
+  });
+  if (!d.exercises.length) h += '<p class="hint">No exercises yet. Add your first one to start logging sets.</p>';
+  h += '<button class="ghost" data-act="addex" style="margin-bottom:14px">+ Add Exercise</button>' +
+    '<div class="card"><label class="f" for="wnote">Workout notes</label><textarea id="wnote" data-f="wnote" placeholder="How did it feel?">' + esc(d.note) + '</textarea></div>' +
+    '<button class="btn primary" data-act="saveW">Save Workout</button>';
+  if (d.id) h += '<button class="btn" data-act="cancel" style="margin-top:10px">Cancel editing</button>';
+  return h;
+}
+
+function viewHabits(){
+  const t = todayStr(), done = S.log[t] || [], total = S.habits.length;
+  const n = S.habits.filter(x => done.includes(x.id)).length, pct = total ? Math.round(n / total * 100) : 0;
+  const C = 2 * Math.PI * 50;
+  let h = '<h1>Habits</h1><div class="card"><div class="ringwrap"><div class="ring">' +
+    '<svg width="116" height="116" viewBox="0 0 116 116"><circle cx="58" cy="58" r="50" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>' +
+    '<circle cx="58" cy="58" r="50" fill="none" stroke="#ecebe8" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - pct/100)).toFixed(1) + '" style="transition:stroke-dashoffset .4s"/></svg>' +
+    '<b>' + pct + '%</b></div><p><strong>' + n + ' of ' + total + ' done</strong>' + (total ? (n === total ? 'All habits complete today.' : 'Keep going, today is yours.') : 'Add a habit to begin.') + '</p></div></div>';
+  h += '<div class="card" style="padding:4px 16px">';
+  if (!total) h += '<p class="hint">No habits yet.<br>Try “Drink 2L Water”, “Sleep 8h” or “Protein goal”.</p>';
+  S.habits.forEach(x => {
+    h += '<div class="habit"><label><input type="checkbox" data-act="toggle" data-id="' + x.id + '"' + (done.includes(x.id) ? ' checked' : '') + '>' +
+      '<span class="box">✓</span><span class="t">' + esc(x.name) + '</span></label>' +
+      '<button class="x" data-act="edithabit" data-id="' + x.id + '" aria-label="Rename habit" style="font-size:17px">✎</button>' +
+      '<button class="x" data-act="delhabit" data-id="' + x.id + '" aria-label="Delete habit">×</button></div>';
+  });
+  h += '</div><div class="card"><label class="f" for="newHabit">New habit</label><div class="row"><input id="newHabit" placeholder="Habit name" maxlength="60">' +
+    '<button class="primary" data-act="addhabit" style="flex:none">Add</button></div></div>';
+  return h;
+}
+
+function viewHistory(){
+  const list = [...S.workouts].sort((a, b) => b.date.localeCompare(a.date) || (b.savedAt || 0) - (a.savedAt || 0));
+  let h = '<h1>History</h1>';
+  if (!list.length) return h + '<p class="hint">Saved workouts will appear here.</p>';
+  list.forEach(w => {
+    const sets = w.exercises.reduce((a, e) => a + e.sets.length, 0);
+    h += '<div class="card h-item' + (openId === w.id ? ' open' : '') + '"><button class="h-top" data-act="expand" data-id="' + w.id + '">' +
+      '<span>' + fmtDate(w.date) + '<small>' + esc(w.type || 'No type') + ' · ' + w.exercises.length + ' exercises · ' + sets + ' sets</small></span><span class="chev">▼</span></button><div class="h-body">';
+    w.exercises.forEach(e => {
+      h += '<h3>' + esc(e.name || 'Untitled exercise') + '</h3>' +
+        (e.sets.length ? e.sets.map((s, j) => '<p>' + (j+1) + '.  ' + esc(s.w || 0) + ' kg × ' + esc(s.r || 0) + '</p>').join('') : '<p>No sets logged</p>');
+    });
+    if (w.note) h += '<div class="note">' + esc(w.note) + '</div>';
+    h += '<div class="row" style="margin-top:16px"><button class="btn" data-act="edit" data-id="' + w.id + '">Edit</button>' +
+      '<button class="btn danger" data-act="delW" data-id="' + w.id + '">Delete</button></div></div></div>';
+  });
+  return h;
+}
+
+/* ---------- Events ---------- */
+const app = document.getElementById('app');
+document.querySelector('nav').addEventListener('click', e => {
+  const b = e.target.closest('.tab'); if (!b) return;
+  tab = b.dataset.tab; render(); window.scrollTo(0, 0);
+});
+
+app.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act, d = S.draft, i = +el.dataset.i, j = +el.dataset.j, id = el.dataset.id;
+  if (a === 'manage') { manage = !manage; render(); }
+  else if (a === 'addtype') {
+    const inp = document.getElementById('newType'), v = inp.value.trim();
+    if (!v) { inp.focus(); return; }
+    if (!S.types.includes(v)) S.types.push(v);
+    d.type = v; save(); render();
+  }
+  else if (a === 'deltype') { const t = S.types[i]; S.types.splice(i, 1); if (d.type === t) d.type = ''; save(); render(); }
+  else if (a === 'addex') { d.exercises.push({name:'', sets:[{w:'', r:''}]}); save(); render();
+    const ins = app.querySelectorAll('[data-f="name"]'); if (ins.length) ins[ins.length - 1].focus(); }
+  else if (a === 'delex') { d.exercises.splice(i, 1); save(); render(); }
+  else if (a === 'addset') { const s = d.exercises[i].sets, l = s[s.length - 1]; s.push({w: l ? l.w : '', r: l ? l.r : ''}); save(); render(); }
+  else if (a === 'delset') { d.exercises[i].sets.splice(j, 1); save(); render(); }
+  else if (a === 'saveW') {
+    if (!d.exercises.length) { toast('Add at least one exercise'); return; }
+    const w = clone(d); w.id = w.id || uid(); w.savedAt = Date.now();
+    const k = S.workouts.findIndex(x => x.id === w.id);
+    if (k > -1) S.workouts[k] = w; else S.workouts.push(w);
+    S.draft = newDraft(); save(); render(); toast('Workout saved'); window.scrollTo(0, 0);
+  }
+  else if (a === 'cancel') { S.draft = newDraft(); save(); render(); }
+  else if (a === 'addhabit') {
+    const inp = document.getElementById('newHabit'), v = inp.value.trim();
+    if (!v) { inp.focus(); return; }
+    S.habits.push({id: uid(), name: v}); save(); render();
+  }
+  else if (a === 'edithabit') {
+    const hb = S.habits.find(x => x.id === id), v = prompt('Rename habit', hb.name);
+    if (v && v.trim()) { hb.name = v.trim(); save(); render(); }
+  }
+  else if (a === 'delhabit') {
+    if (!confirm('Delete this habit?')) return;
+    S.habits = S.habits.filter(x => x.id !== id); save(); render();
+  }
+  else if (a === 'expand') { openId = openId === id ? null : id; render(); }
+  else if (a === 'delW') {
+    if (!confirm('Delete this workout?')) return;
+    S.workouts = S.workouts.filter(x => x.id !== id); openId = null; save(); render();
+  }
+  else if (a === 'edit') { S.draft = clone(S.workouts.find(x => x.id === id)); save(); tab = 'workout'; render(); window.scrollTo(0, 0); }
+});
+
+app.addEventListener('change', e => {
+  const el = e.target;
+  if (el.id === 'date' && el.value) { S.draft.date = el.value; save(); }
+  else if (el.id === 'type') { S.draft.type = el.value; save(); }
+  else if (el.dataset.act === 'toggle') {
+    const t = todayStr(), arr = S.log[t] || [];
+    S.log[t] = el.checked ? [...new Set([...arr, el.dataset.id])] : arr.filter(x => x !== el.dataset.id);
+    save(); render();
+  }
+});
+
+// typing saves state without re-rendering so focus is never lost
+app.addEventListener('input', e => {
+  const el = e.target, f = el.dataset.f; if (!f) return;
+  const d = S.draft;
+  if (f === 'w' || f === 'r') d.exercises[+el.dataset.i].sets[+el.dataset.j][f] = el.value.replace(',', '.');
+  else if (f === 'name') d.exercises[+el.dataset.i].name = el.value;
+  else if (f === 'wnote') d.note = el.value;
+  save();
+});
+
+app.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (e.target.id === 'newHabit') app.querySelector('[data-act="addhabit"]').click();
+  if (e.target.id === 'newType') app.querySelector('[data-act="addtype"]').click();
+});
+
+render();
+</script>
+</body>
+</html>
